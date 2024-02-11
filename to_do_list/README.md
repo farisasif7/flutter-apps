@@ -2,7 +2,7 @@
 
 A new Flutter project.
 
-![App screenshot](to_do_list/screenshots/home_screen.jpeg)
+![App screenshot](screenshots/home_screen.jpeg)
 
 ## Getting Started
 
