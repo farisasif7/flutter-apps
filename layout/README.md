@@ -2,7 +2,7 @@
 
 A new Flutter project.
 
-![App screenshot]('screenshots/homescreen.png')
+![App screenshot](screenshots/homescreen.png)
 
 ## Getting Started
 
