@@ -1,6 +1,8 @@
 # namer_app
 
 A new Flutter project.
+![App screenshot](screenshots/homePage.png)
+![App screenshot](screenshots/favoritesPage.png)
 
 ## Getting Started
 
