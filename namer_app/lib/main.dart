@@ -3,10 +3,14 @@
 // Faris Bin Asif 20k-0270
 // Sohaib Akhter 20k-0292
 // Assignment 1 - Due Date: 17th Feb 2024
+// Updated for Home task of Saturday March 16, 2024
 
 import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,13 +37,45 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
+  var favorites = <WordPair>[];
+
+  MyAppState() {
+    // Load favorites when the app starts
+    _loadFavorites();
+  }
+
+  Future<void> _loadFavorites() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/favorites.json');
+    print('File path: ${file.path}');
+
+    if (await file.exists()) {
+      final jsonString = await file.readAsString();
+      print('File contents: $jsonString');
+      final List<String> favoriteStrings =
+          jsonDecode(jsonString).cast<String>();
+      favorites = favoriteStrings
+          .map((e) => WordPair(e.split(',').first, e.split(',').last))
+          .toList();
+    } else {
+      print('File does not exist');
+    }
+    notifyListeners();
+  }
+
+  void _saveFavorites() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/favorites.json');
+    print('Saving to: ${file.path}');
+    final List<String> favoriteStrings =
+        favorites.map((pair) => '${pair.first},${pair.second}').toList();
+    await file.writeAsString(jsonEncode(favoriteStrings));
+  }
 
   void getNext() {
     current = WordPair.random();
     notifyListeners();
   }
-
-  var favorites = <WordPair>[];
 
   void toggleFavorite() {
     if (favorites.contains(current)) {
@@ -47,6 +83,8 @@ class MyAppState extends ChangeNotifier {
     } else {
       favorites.add(current);
     }
+    // Save favorites whenever it's modified
+    _saveFavorites();
     notifyListeners();
   }
 }
